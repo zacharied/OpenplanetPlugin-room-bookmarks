@@ -1,0 +1,10 @@
+[meta]
+name     = "Room Bookmarks"
+author   = "Necoji"
+category = "Utilities"
+version  = "0.0.1"
+
+[script]
+dependencies = [ "NadeoServices" ]
+optional_dependencies = [ ]
+timeout = 10000
