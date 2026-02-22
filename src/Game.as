@@ -2,6 +2,11 @@ namespace Game {
     Bookmark@ JoinTarget;
     
     void TryJoinServer() {
+        if (!Permissions::PlayPublicClubRoom()) {
+            UI::ShowNotification("Cannot join", "Your account does not have permission to join club rooms!");
+            return;
+        }
+
         try {
             UI::ShowNotification("Joining room", "Joining bookmarked room \"" + JoinTarget.Name + "\". This may take a while if the server needs to start up."); 
             JoinServer();
