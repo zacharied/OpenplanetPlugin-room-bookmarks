@@ -44,11 +44,14 @@ class EditItemModal : ModalDialog {
         m_textEntry = UI::InputText("Name##NameInput", m_textEntry, UI::InputTextFlags::CallbackCharFilter, UI::InputTextFormatCodesCallback);
         
         if (m_isBookmark) {
+            auto extraFlags = s_enableEditBookmarkIds ? 0 : UI::InputTextFlags::ReadOnly;
+            UI::PushStyleColor(UI::Col::Text, UI::GetStyleColor(s_enableEditBookmarkIds ? UI::Col::Text : UI::Col::TextDisabled));
             UI::PushItemWidth(70);
-            m_roomClubIdEntry = UI::InputText("Club ID##ClubIdEntry", m_roomClubIdEntry, UI::InputTextFlags::CallbackCharFilter, UI::InputNumberCharFilterCallback);
+            m_roomClubIdEntry = UI::InputText("Club ID##ClubIdEntry", m_roomClubIdEntry, UI::InputTextFlags::CallbackCharFilter | extraFlags, UI::InputNumberCharFilterCallback);
             UI::SameLine();
-            m_roomRoomIdEntry = UI::InputText("Room ID##RoomIdEntry", m_roomRoomIdEntry, UI::InputTextFlags::CallbackCharFilter, UI::InputNumberCharFilterCallback);
+            m_roomRoomIdEntry = UI::InputText("Room ID##RoomIdEntry", m_roomRoomIdEntry, UI::InputTextFlags::CallbackCharFilter | extraFlags, UI::InputNumberCharFilterCallback);
             UI::PopItemWidth();
+            UI::PopStyleColor();
         }
         
         if (UI::BeginCombo("Folder##BaseFolderCombo", m_baseFolder.Name)) {
