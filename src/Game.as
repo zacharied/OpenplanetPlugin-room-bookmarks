@@ -8,10 +8,10 @@ namespace Game {
         }
 
         try {
-            UI::ShowNotification("Joining room", "Joining bookmarked room \"" + JoinTarget.Name + "\". This may take a while if the server needs to start up."); 
+            UI::ShowNotification("Joining room", "Joining bookmarked room \"\\$<" + JoinTarget.Name + "\\$>\". This may take a while if the server needs to start up."); 
             JoinServer();
         } catch {
-            UI::ShowNotification("Failed to join", "Unable to join bookmarked room \"" + JoinTarget.Name + "\".", vec4(.9, .3, .1, .3));
+            UI::ShowNotification("Failed to join", "Unable to join bookmarked room \"\\$<" + JoinTarget.Name + "\\$>\".", vec4(.9, .3, .1, .3));
         }
     }
 

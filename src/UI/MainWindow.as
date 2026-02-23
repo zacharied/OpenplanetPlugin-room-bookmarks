@@ -37,7 +37,7 @@ namespace MainWindow {
 
             if (UI::Button(Icons::Trash + "##DeleteFolderButton")) {            
                 @DeleteCommandTarget = folder;
-                auto modal = DeletePromptModal(OnConfirmDelete, "Delete folder", "Delete the folder \"" + folder.Name + "\" and all its contents?");
+                auto modal = DeletePromptModal(OnConfirmDelete, "Delete folder", "Delete the folder \"\\$<" + folder.Name + "\\$>\" and all its contents?");
                 Renderables::Add(modal);
             }
             
@@ -89,7 +89,7 @@ namespace MainWindow {
         UI::SameLine(spacing, 0);
         if (UI::Button(Icons::Trash + "##DeleteBookmark")) {
             @DeleteCommandTarget = bookmark;
-            auto modal = DeletePromptModal(OnConfirmDelete, "Delete bookmark", "Delete bookmark \"" + bookmark.Name + "\"?");
+            auto modal = DeletePromptModal(OnConfirmDelete, "Delete bookmark", "Delete bookmark \\$<\"" + bookmark.Name + "\\$>\"?");
             Renderables::Add(modal);
         }
 
