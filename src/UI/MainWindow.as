@@ -37,9 +37,10 @@ namespace MainWindow {
 
             if (UI::Button(Icons::Trash + "##DeleteFolderButton")) {            
                 @DeleteCommandTarget = folder;
-                auto modal = DeletePromptModal(OnConfirmDelete, "Delete folder", "Delete the folder \"\\$<" + folder.Name + "\\$>\" and all its contents?");
+                auto modal = DeletePromptModal(OnConfirmDelete, "Delete folder", "Delete the folder \"\\$<" + folder.Name + "\\$>\" and all of its contents?");
                 Renderables::Add(modal);
             }
+            UI::SetItemTooltip("Delete this folder");
             
             UI::SameLine(0, 0);
 
@@ -48,6 +49,7 @@ namespace MainWindow {
                 auto modal = EditItemModal(OnEditConfirmed, folder, null, true);
                 Renderables::Add(modal);
             }
+            UI::SetItemTooltip("Edit this folder");
 
             UI::SameLine(0, 0);
         } else {
@@ -61,6 +63,7 @@ namespace MainWindow {
             auto modal = EditItemModal(OnEditConfirmed, newFolder, folder);
             Renderables::Add(modal);
         }
+        UI::SetItemTooltip("Create a new folder");
 
         if (isTreeOpen) {
             for (uint j = 0; j < folder.Contents.Length; j++) {
@@ -89,9 +92,10 @@ namespace MainWindow {
         UI::SameLine(spacing, 0);
         if (UI::Button(Icons::Trash + "##DeleteBookmark")) {
             @DeleteCommandTarget = bookmark;
-            auto modal = DeletePromptModal(OnConfirmDelete, "Delete bookmark", "Delete bookmark \\$<\"" + bookmark.Name + "\\$>\"?");
+            auto modal = DeletePromptModal(OnConfirmDelete, "Delete bookmark", "Delete bookmark \"\\$<" + bookmark.Name + "\\$>\"?");
             Renderables::Add(modal);
         }
+        UI::SetItemTooltip("Delete this bookmark");
 
         UI::SameLine(0, 0);
         if (UI::Button(Icons::Pencil + "##EditBookmark")) {
