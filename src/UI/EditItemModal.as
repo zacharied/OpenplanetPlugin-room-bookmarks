@@ -27,7 +27,7 @@ class EditItemModal : ModalDialog {
         @m_callback = callback;
         @m_item = item;
         
-        m_textEntry = item.Name;
+        m_textEntry = item.Name.Replace("\\$", "$");
 
         if (containingFolder is null) {
             @containingFolder = BookmarksManager::GetContainingFolder(item);
@@ -41,7 +41,8 @@ class EditItemModal : ModalDialog {
     }
     
     void RenderDialog() override {
-        m_textEntry = UI::InputText("Name##NameInput", m_textEntry);
+        bool textChanged;
+        m_textEntry = UI::InputText("Name##NameInput", m_textEntry, textChanged, UI::InputTextFlags::CallbackCharFilter, UI::InputTextFormatCodesCallback);
         
         if (m_isBookmark) {
             UI::PushItemWidth(70);
@@ -70,7 +71,7 @@ class EditItemModal : ModalDialog {
 
         UI::SameLine();
         if (UI::GreenButton(confirmText)) {
-            m_item.Name = m_textEntry;
+            m_item.Name = Text::OpenplanetFormatCodes(m_textEntry);
             if (m_isBookmark) {
                 cast<Bookmark@>(m_item).ClubId = Text::ParseInt(m_roomClubIdEntry);
                 cast<Bookmark@>(m_item).RoomId = Text::ParseInt(m_roomRoomIdEntry);
@@ -103,5 +104,11 @@ class EditItemModal : ModalDialog {
             RenderFolderComboBox(itemFolder, indent + 1);
         }
         UI::PopID();
+    }
+    
+    private void NameInputTextChangeCallback(UI::InputTextCallbackData@ data) {
+        if (data.EventChar == 0x5c) { // Backslash character
+            return;
+        }
     }
 }
