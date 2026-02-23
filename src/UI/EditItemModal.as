@@ -41,14 +41,13 @@ class EditItemModal : ModalDialog {
     }
     
     void RenderDialog() override {
-        bool textChanged;
-        m_textEntry = UI::InputText("Name##NameInput", m_textEntry, textChanged, UI::InputTextFlags::CallbackCharFilter, UI::InputTextFormatCodesCallback);
+        m_textEntry = UI::InputText("Name##NameInput", m_textEntry, UI::InputTextFlags::CallbackCharFilter, UI::InputTextFormatCodesCallback);
         
         if (m_isBookmark) {
             UI::PushItemWidth(70);
-            m_roomClubIdEntry = UI::InputText("Club ID##ClubIdEntry", m_roomClubIdEntry, UI::InputTextFlags::CharsDecimal);    
+            m_roomClubIdEntry = UI::InputText("Club ID##ClubIdEntry", m_roomClubIdEntry, UI::InputTextFlags::CallbackCharFilter, UI::InputNumberCharFilterCallback);
             UI::SameLine();
-            m_roomRoomIdEntry = UI::InputText("Room ID##RoomIdEntry", m_roomRoomIdEntry, UI::InputTextFlags::CharsDecimal);
+            m_roomRoomIdEntry = UI::InputText("Room ID##RoomIdEntry", m_roomRoomIdEntry, UI::InputTextFlags::CallbackCharFilter, UI::InputNumberCharFilterCallback);
             UI::PopItemWidth();
         }
         
@@ -64,11 +63,11 @@ class EditItemModal : ModalDialog {
 
         UI::SetCursorPosX(nextX);
 
-        UI::BeginDisabled(m_textEntry.Trim().Length == 0);
         if (UI::Button(cancelText)) {
             Close();
         }
 
+        UI::BeginDisabled(m_textEntry.Trim().Length == 0);
         UI::SameLine();
         if (UI::GreenButton(confirmText)) {
             m_item.Name = Text::OpenplanetFormatCodes(m_textEntry);
@@ -104,11 +103,5 @@ class EditItemModal : ModalDialog {
             RenderFolderComboBox(itemFolder, indent + 1);
         }
         UI::PopID();
-    }
-    
-    private void NameInputTextChangeCallback(UI::InputTextCallbackData@ data) {
-        if (data.EventChar == 0x5c) { // Backslash character
-            return;
-        }
     }
 }

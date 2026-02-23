@@ -5,6 +5,12 @@ namespace UI {
         }
     }
 
+    void InputNumberCharFilterCallback(UI::InputTextCallbackData@ data) {
+        if (data.EventChar < 0x30 || data.EventChar > 0x39) {
+            data.EventChar = 0;
+        }
+    }
+
     vec2 MeasureButton(const string &in label) {
         vec2 text = UI::MeasureString(label);
         vec2 padding = UI::GetStyleVarVec2(UI::StyleVar::FramePadding);
