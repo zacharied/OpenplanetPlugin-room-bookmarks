@@ -29,7 +29,7 @@ namespace MainWindow {
     void RenderFolderTree(Folder@ &in folder, bool isRoot = false) {
         UI::PushID(folder);
         auto extraFlags = isRoot ? UI::TreeNodeFlags::DefaultOpen : 0;
-        auto isTreeOpen = UI::TreeNode(folder.Name + "##FolderName", UI::TreeNodeFlags::Framed | UI::TreeNodeFlags::AllowOverlap | extraFlags);
+        auto isTreeOpen = UI::TreeNode(folder.Name + "##FolderName", UI::TreeNodeFlags::Framed | UI::TreeNodeFlags::AllowOverlap | UI::TreeNodeFlags::OpenOnDoubleClick | UI::TreeNodeFlags::OpenOnArrow | extraFlags);
         
         if (!isRoot) {
             auto spacing = UI::GetContentRegionMax().x - UI::MeasureButton(Icons::Circle).x * 3;
