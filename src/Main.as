@@ -4,15 +4,20 @@ void Main() {
     Save::LoadSaveFile();
     BookmarksManager::SortTree();
     
+    MLHook::RegisterMLHook(RouterPushHook(), "", true);
+    MLHook::RegisterMLHook(RouterPushParentHook(), "", true);
+    
     startnew(WatchServer::Main);
 }
 
 void OnDisabled() { 
     Save::UpdateSaveFile();
+    MLHook::UnregisterMLHooksAndRemoveInjectedML();
 }
 
 void OnDestroyed() { 
     Save::UpdateSaveFile();
+    MLHook::UnregisterMLHooksAndRemoveInjectedML();
 }
 
 void Render() {
@@ -29,12 +34,12 @@ void RenderMenu() {
             g_showMainMenu = true;
         }
 
-        if (UI::MenuItem(Icons::Plus + " Bookmark this room", "", false, WatchServer::ClubId >= 0)) { 
-            if (WatchServer::ClubId >= 0) {
+        if (UI::MenuItem(Icons::Plus + " Bookmark this room", "", false, Game::RoomId >= 0)) { 
+            if (Game::RoomId >= 0) {
                 auto bookmark = Bookmark();
-                bookmark.Name = Text::OpenplanetFormatCodes(WatchServer::ServerName);
-                bookmark.ClubId = WatchServer::ClubId;
-                bookmark.RoomId = WatchServer::RoomId;
+                bookmark.Name = Text::OpenplanetFormatCodes(Game::RoomName);
+                bookmark.ClubId = Game::ClubId;
+                bookmark.RoomId = Game::RoomId;
                 BookmarksManager::AddItem(bookmark);
             }
         }
@@ -64,8 +69,7 @@ void RenderMenuItem(IFolderItem@ item) {
 void RenderMenuBookmark(Bookmark@ &in bookmark) {
     UI::PushID(bookmark);
     if (UI::MenuItem(bookmark.Name)) {
-        @Game::JoinTarget = bookmark;
-        startnew(Game::TryJoinServer);
+        startnew(Game::TryJoinServer, bookmark);
     }
     UI::PopID();
 }

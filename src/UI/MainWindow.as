@@ -107,8 +107,7 @@ namespace MainWindow {
         
         UI::SameLine(0, 0);
         if (UI::GreenButton(Icons::Play + "##JoinServer")) {
-            @Game::JoinTarget = bookmark;
-            startnew(Game::TryJoinServer);
+            startnew(Game::TryJoinServer, bookmark);
         }
         UI::SetItemTooltip("Join server");
         
