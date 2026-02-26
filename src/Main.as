@@ -41,6 +41,9 @@ void RenderMenu() {
                 bookmark.ClubId = Game::ClubId;
                 bookmark.RoomId = Game::RoomId;
                 BookmarksManager::AddItem(bookmark);
+                UI::ShowNotification("Bookmark added", "\"\\$<" + bookmark.Name + "\\$>\" has been added as a bookmark.");
+            } else {
+                UI::ShowNotification("Unable to bookmark", "Failed to find the room associated with the current server.", vec4(.9, .3, .1, .3));
             }
         }
         
