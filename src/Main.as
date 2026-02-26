@@ -35,9 +35,9 @@ void RenderMenu() {
         }
 
         if (UI::MenuItem(Icons::Plus + " Bookmark this room", "", false, Game::RoomId >= 0)) { 
-            if (Game::RoomId >= 0) {
+            if (Game::ClubId >= 0 && Game::RoomId >= 0) {
                 auto bookmark = Bookmark();
-                bookmark.Name = Text::OpenplanetFormatCodes(Game::RoomName);
+                bookmark.Name = Game::RoomName.Length > 0 ? Text::OpenplanetFormatCodes(Game::RoomName) : "Untitled bookmark";
                 bookmark.ClubId = Game::ClubId;
                 bookmark.RoomId = Game::RoomId;
                 BookmarksManager::AddItem(bookmark);
