@@ -1,4 +1,6 @@
 namespace Game {
+    bool CancelJoinRoom = false;
+
     int get_ClubId() { 
         return RouterWatch::ClubId < 0 ? WatchServer::ClubId : RouterWatch::ClubId;
     }
@@ -23,11 +25,24 @@ namespace Game {
             return;
         }
 
-        try {
-            UI::ShowNotification("Joining room", "Joining bookmarked room \"\\$<" + bookmark.Name + "\\$>\". This may take a while if the server needs to start up."); 
-            JoinServer(bookmark.ClubId, bookmark.RoomId);
-        } catch {
-            UI::ShowNotification("Failed to join", "Unable to join bookmarked room \"\\$<" + bookmark.Name + "\\$>\".", vec4(.9, .3, .1, .3));
+        auto modal = JoinServerModal(bookmark, function() { Game::CancelJoinRoom = true; });
+        Renderables::Add(modal);
+
+        while (true) {
+            if (modal.ShouldDisappear())
+                break;
+            
+            modal.JoinFailed = false;
+
+            try {
+                JoinServer(bookmark.ClubId, bookmark.RoomId);
+                modal.JoinCompleted = true;
+            } catch {
+                modal.JoinFailed = true;
+            }
+            
+            while (!modal.RetryRequested && !modal.ShouldDisappear())
+                yield();
         }
     }
 
@@ -36,17 +51,30 @@ namespace Game {
         if (clubId < 0 || roomId < 0) {
             return; 
         }
+        
+        CancelJoinRoom = false;
 
         string pw;
         //if (password.Length > 0) {
         //    pw = ":" + password;
         //}
+
         Json::Value@ joinLink = API::GetJoinLink(clubId, roomId);
+        if (CancelJoinRoom) {
+            trace("Room join request canceled by user");
+            return;
+        }
+
         uint count = 0;
         while (!JoinLinkReady(joinLink) && count < 10) {
             count++;
             sleep(2000);
             @joinLink = API::GetJoinLink(clubId, roomId);
+
+            if (CancelJoinRoom) {
+                trace("Room join request canceled by user");
+                return;
+            }
         }
         if (count >= 10) {
             throw("No server was available after 10 retries (20+ seconds)");
@@ -72,5 +100,10 @@ namespace Game {
         }
         app.BackToMainMenu();
         while (yieldTillReady && !app.ManiaTitleControlScriptAPI.IsReady) yield();
+    }
+    
+    class JoinServerData {
+        int ClubId = -1;
+        int RoomId = -1; 
     }
 }
