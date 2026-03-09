@@ -2,7 +2,7 @@
 name     = "Room Bookmarks"
 author   = "Necoji"
 category = "Utilities"
-version  = "0.0.2"
+version  = "0.0.3"
 
 [script]
 dependencies = [ "NadeoServices", "MLHook" ]
